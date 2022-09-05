@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02-何為數據代理.html</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 数据代理，通过一个对象代理另一个对象中属性的操作  -->
+    <script type="text/javascript">
+
+        let obj = { x: 200 }
+        let obj2 = { y: 200 }
+
+        // Object.defineProperty(): 需要傳三個參數，第一個參數對象、第二個參數屬性名稱、第三個參數配置對象。
+        // 通过 obj2 代理 obj，来操作 obj 的 x
+        Object.defineProperty(obj2, 'x', {
+            get() {
+                return obj.x
+            },
+            set(v) {
+                obj.x = v;
+            }
+        });
+
+    </script>
+</body>
+
+</html>
