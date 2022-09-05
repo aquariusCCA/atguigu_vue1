@@ -1,0 +1,47 @@
+<!--
+    初識 Vue:
+        1. 想讓 Vue 工作，就必須創建一個 Vue 實例，且要傳入一個配置對象。
+        2. root 容器裡的代碼依然符合 html 規範，只不過混入了一些特殊的 Vue 語法。
+        3. root 容器裡的代碼被稱為 Vue 模板。
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01-Hello案例.html</title>
+    <!-- 引入 Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+
+    <!-- 準備好一個容器 -->
+        <div id="root">
+            <!-- Vue模版 -->
+            <!-- 插值语法: {{ xxx }} -->
+                <h1>hello, {{ name }}</h1>
+        </div>
+
+
+    <script>
+        
+        // 设置为 false 以阻止 vue 在启动时生成生产提示。
+            Vue.config.productionTip = false;
+
+        // 創建 Vue 實例，並傳入一個對象，這個對象通常叫做配置對象。
+            const x = new Vue({
+                //配置对象
+                    // 相當於 document.getElementById('root');
+                    // el(element): 指定当前 vue 实例为哪一个容器服务，值通常为 css 选择器格式。
+                    el: '#root',
+                    data: {
+                        // data 用来存储数据，數據供 el 所指定的容器使用。
+                        // 講到組件的時候，會使用函數的方式定義 data。
+                        name:'xiao',
+                        age: 25
+                    }
+            })
+    </script>
+</body>
+</html>

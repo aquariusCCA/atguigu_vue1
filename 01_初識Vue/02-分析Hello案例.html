@@ -1,0 +1,69 @@
+<!--
+    分析 Hello 案例
+        1. Vue 實例和容器是一一對應。
+        2. 真實開發中，只有一個 Vue 實例，並且會配合著組件一起使用。
+        3. {{ xxx }} 中的 xxx 要寫 js 表達式，且 xxx 可以自動讀取到 data 中的所有屬性。
+        4. 一旦 data 中的數據發生改變，那麼模板中用到該數據的地方也會自動更新。
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="wclassth=device-wclassth, initial-scale=1.0">
+    <title>02-分析Hello案例.html</title>
+    <!-- 引入 Vue -->
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 準備好容器 -->
+    <div id="root">
+        <h1>hello, {{ name }}</h1>
+    </div>
+
+    <div class="test">
+        <!-- 注意双花括号中可以写js表达式 -->
+        <!--
+             js表达式：一个表达式生成一个值，放在任何一个需要值的地方
+                   例如 (1) a (2) 1+b (3) demo(1) （4) x === y ? 1 : 0
+
+             js语句： if、while、for...
+        -->
+        <h1>{{name.toUpperCase()}}, {{address}} {{1+1}} {{Date.now()}}</h1>
+    </div>
+
+    <script>
+        // 设置为 false 以阻止 vue 在启动时生成生产提示。
+        Vue.config.productionTip = false;
+
+       /**
+        * 注意:一个 vue 实例不可能去接管多个容器，如果有多个容器的情况，vue 實例永远只接管第一个容器
+        * 不能多个 vue 实例同时来接管同一个容器，如果有多个的情况下永远是第一个 vue 实例来接管该容器
+        * vue 实例与容器直接的对应关系是一对一的。
+        */
+
+        // 創建 Vue 實例
+        new Vue({
+            //配置对象
+            el: '#root',
+            data: {
+                name: 'panyue',
+                age: 21
+            }
+        });
+
+        new Vue({
+            el: '.test',
+            data: {
+                name: 'test',
+                address: 'Tokyo'
+            }
+        })
+
+    </script>
+</body>
+
+</html>
