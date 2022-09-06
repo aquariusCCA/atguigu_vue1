@@ -1,0 +1,81 @@
+<!--
+    事件的基本使用
+        1. 使用 v-on:xxx 或 @xxx 綁定事件，其中 xxx 是事件名。
+        2. 事件的回調需要配置在 methods 對象中，最終會在 vm 上。
+        3. methods 中配置的函數，不要用箭頭函數，否則 this 就不是 vm 了。
+        4. methods 中配置的函數，都是被 Vue 所管理的函數，this 的指向是 vm 或組件實例對象。
+        5. @click="demo" 和 @click="demo($event)" 效果一樣，但後者可以傳入參數。
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01-事件的基本使用.html</title>
+    <script src="../js/vue.js"></script>
+
+</head>
+
+<body>
+
+    <div id="root">
+        <h1>欢迎来到 {{ name }}</h1>
+
+        <!-- 示範如何綁定事件 -->
+            <button v-on:click="showInfo">点我提示信息</button>
+
+            <!-- 加小括號和不加小括號其實都可以，主要看你要不要傳入參數。 -->
+                <!-- <button v-on:click="showInfo()">点我提示信息</button> -->
+
+            <!-- 如下是 v-on:click 的簡寫形式 -->
+                <!-- <button @click="showInfo">点我提示信息</button> -->
+
+
+        <!-- 示範參數傳遞 -->
+            <!-- <button @click="showInfo2(66)">点我提示信息 (傳餐)</button> -->
+
+            <!-- 
+            注意點: 當我們傳入參數時，Vue就不會默認的幫我們把 event 傳入到方法內，
+            所以此時我們需要手動聲明傳入 $event 事件對象。 
+            -->
+                <button @click="showInfo2(66, $event)">点我提示信息 (傳餐)</button>
+
+    </div>
+
+
+        
+
+ 
+
+    <script type='text/javascript'>
+        Vue.config.productionTip = false;
+
+
+        const vm = new Vue({
+            el: "#root",
+            data() {
+                return {
+                    name: 'Shanghai'
+                }
+            },
+            methods: {
+                showInfo(e) {
+                    // e.target: 拿到當前正在響應事件的 DOM 元素。
+                    console.log(e.target)
+
+                    // 此處的 this 就是 Vue 實例對象。
+                    console.log(this === vm)
+                },
+                showInfo2(number, event){
+                    alert(number)
+
+                    console.log(event)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
