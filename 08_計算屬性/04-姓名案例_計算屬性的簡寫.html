@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>04-姓名案例_計算屬性的簡寫.html</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <!--v-model双向绑定-->
+        姓:<input type="text" v-model="firstName" />
+        <br /><br />
+
+        名:<input type="text" v-model="lastName" />
+        <br /><br />
+
+        测试:<input type="text" v-model="test" />
+        <br /><br />
+
+        全名: <span>{{ fullName }}</span>
+    </div>
+    <script type="text/javascript">
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                //data里的都是属性
+                firstName: '张',
+                lastName: '三',
+                test: 'test'
+            },
+            // 计算属性--> 舊属性加工
+            computed: {
+                // 简写形式
+                // 前提: 计算属性只考虑读取，不考虑修改
+                // 简写计算屬性为一个函数 ( 这个函数当成 getter 使用 ), 注意不要写箭头函数
+                // 执行完 getter 之后，vm 直接保存返回的数据为 fullName 属性的属性值, 此时 vm.fullName 不是函数而是一个确切的计算值。
+                fullName: function () {
+                    return this.firstName + '--' + this.lastName;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
