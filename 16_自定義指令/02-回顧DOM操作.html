@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02-回顧DOM操作.html</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        .demo{
+            background: orange;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="btn">
+        点我创建一个输入框
+    </button>
+    <script type="text/javascript">
+
+        const btn = document.querySelector('#btn');
+
+        btn.onclick = () => {
+            // 創建 input 輸入框 
+            const input = document.createElement('input');
+
+
+            // 有一些設置不需要等到，添加到 dom 樹時才可以做。(如下)
+            input.className = 'demo';
+            input.value = "99";
+            input.onclick = () => alert('你好,世界');
+
+
+            console.log(input.parentElement); //此时它的parentElement属性是null，无法获取，因为它并不在dom树中
+
+            //将该 input 插入到 dom 树中
+            document.body.appendChild(input);
+
+
+            // 有一些設置就必須放在添加到 dom 樹中才能生效。(如下)
+            // input 出现的时候，让其自动获取焦点
+            // 注意一定要在 input 框被放到 dom 树中
+            // 再运行 focus 函数，否则它将无法自动获取焦点
+            input.focus(); // 一定要放在 dom 树中，之後才設置
+
+            input.parentElement.style.backgroundColor = 'skyblue'; // 一定要放在 dom 树中，之後才設置
+        }
+    </script>
+</body>
+
+</html>
