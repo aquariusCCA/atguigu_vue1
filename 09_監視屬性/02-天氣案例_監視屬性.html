@@ -1,0 +1,79 @@
+<!--
+    监视属性watch：
+        1.当被监视的属性变化时, 回调函数自动调用, 进行相关操作
+
+        2.监视的属性必须存在，才能进行监视！！
+
+        3.监视的两种写法：
+            (1). new Vue 时传入 watch 配置
+            (2). 通过 vm.$watch 监视
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02-天氣案例_監視屬性</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <h1>今天天气很 {{ info }}</h1>
+
+        <button @click="changeWeather">
+            切换
+        </button>
+    </div>
+<script type="text/javascript">
+   Vue.config.productionTip = false;
+   
+   const vm = new Vue({
+       el:'#root',
+       data:{
+           isHot: true
+       },
+       //计算属性
+       computed: {
+           info(){
+               return this.isHot ? '炎热' : '凉爽';
+           }
+       },
+       //改变模版数据的方法
+       methods:{
+           changeWeather(){
+               this.isHot = !this.isHot;
+           }
+       },
+       // watch:{ // watch的第一种写法，使用配置對象的寫法
+       //     //监视的配置对象
+       //     //watch 不仅能监视 data 的普通属性，也可以監測计算属性
+       //     isHot:{
+       //         immediate: 立刻的
+       //         immediate: true, // 当这个属性为 true 时，页面刚渲染就运行 handler 函数
+       //         // handler 什么时候调用呢
+       //         // 当 isHot 发生改变就会调用该函数
+       //         // handler 接收两个参数，一个是这个状态参数改变前的值，另一个是改变后的旧值
+       //         handler(newValue, preValue){
+       //             console.log('ishot 被修改了');
+       //             console.log(`newValue: ${newValue}, preValue: ${preValue}`);
+       //         }
+       //     }
+       // }
+   });
+   // watch 的第二种写法，直接采用 vm 对象实例
+   // 為甚麼要加上 '' ?  因為平常創建 JS 對象時的 key 是字符串，
+   // 所以正確來說是需要加上 ''，只是我們都省略不加。
+   vm.$watch('isHot', {
+       immediate: true, // 当这个属性为 true 时，页面刚渲染就运行 handler 函数
+       // handler 什么时候调用呢
+       // 当 isHot 发生改变就会调用该函数
+       // handler 接收两个参数，一个是这个状态参数改变前的值，另一个是改变后的旧值
+       handler(newValue, preValue){
+           console.log('ishot 被修改了');
+           console.log(`newValue: ${newValue}, preValue: ${preValue}`);
+       }
+   });
+</script>
+</body>
+</html>
