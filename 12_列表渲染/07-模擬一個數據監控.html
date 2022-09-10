@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>07-模擬一個數據監控</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript">
+        let data = {
+            name: "武汉科技大学",
+            address: '武汉'
+        }
+
+
+        //无限递归 调用栈炸了 内存溢出
+        //错误写法
+        // Object.defineProperty(data, 'name', {
+        //     get(){
+        //         return data.name
+        //     },
+        //     set(val){
+        //         data.name = val;
+        //     }
+        // })
+
+
+        //创建一个监视实例对象
+        const obs = new Observer(data);
+
+        //准备一个vm实例
+        let vm = {};
+
+        vm._data = data = obs;
+
+        //观察者
+        function Observer(obj) {
+            //缺陷：未实现递归(对象嵌套对象就会出现问题)
+            // Keys(): 彙總對象中所有的屬性，形成一個數組。也就是可以拿到對象中所有的屬性。
+            const keys = Object.keys(obj);
+
+            //遍历对象当中所有的key
+            keys.forEach(key => {
+                // 這個 this 指的是 Observer 的實例對象，並不是指 data，
+                // 如果 this 指的是 data，又會發生剛剛的死循環。 
+                Object.defineProperty(this, key, {
+                    get() {
+                        return obj[key]
+                    },
+                    set(v) {
+                        console.log(`${key}的值改变了,变为${v}`);
+                        obj[key] = v;
+                    }
+                })
+            });
+        }
+
+
+
+    </script>
+</body>
+
+</html>
