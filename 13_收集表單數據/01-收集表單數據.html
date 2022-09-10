@@ -1,0 +1,136 @@
+<!--
+    收集表单数据：
+        若：<input type="text"/>，则v-model收集的是value值，用户输入的就是value值。
+
+
+        若：<input type="radio"/>，则v-model收集的是value值，且要给标签配置value值。
+
+
+        若：<input type="checkbox"/>
+            1.没有配置input的value属性，那么收集的就是checked（勾选 or 未勾选，是布尔值）
+
+            2.配置input的value属性:
+                (1)v-model的初始值是非数组，那么收集的就是checked（勾选 or 未勾选，是布尔值）
+
+                (2)v-model的初始值是数组，那么收集的的就是value组成的数组
+                    备注：v-model的三个修饰符：
+                        lazy：失去焦点再收集数据
+                        number：输入字符串转为有效的数字
+                        trim：输入首尾空格过滤
+            -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01-收集表單數據.html</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <!-- 
+            為表單綁定提交事件  ->  @submit
+            阻止表單提交的默認行為 -> 加上 prevent
+        -->
+        <form @submit.prevent="demo">
+
+
+            <!-- 写了 label 则点击它也能使指定的 input 获取焦点；for属性的值为指定元素的id-->
+            <label for="demo">账号:</label>
+            <!-- v-model主要用来双向绑定输入类表单value值 -->
+            <!-- trim 修飾符: 去除前後的空格 -->
+            <input type="text" id="demo" v-model.trim="userInfo.account" />
+            <br /><hr>
+
+
+            密码: <input type="password" v-model="userInfo.password" />
+            <br /><hr>
+
+
+            性别:
+            <!-- 一组 radio 单选框的 name 值一定要相同，设置 value 值好让 v-model 去双向绑定-->
+            男:<input type="radio" v-model="userInfo.sex" name="sex" value="male" />
+            女:<input type="radio" v-model="userInfo.sex" name="sex" value="female" />
+            <br /><hr>
+
+
+            <!-- 
+            1. type="number"  ->  限制只能輸入數字
+            2. number 修飾符: 將字符串轉換成數字。
+            這兩個通常會搭配使用 
+            -->
+            年龄: <input type="number" v-model.number="userInfo.age" />
+            <br /><hr>
+
+
+            爱好:
+            <!-- 
+                1. 如果没有 value 值，则 v-model 收集的是，同一組勾選框受否有元素被勾選，
+                有勾選返回 true、一個都沒有勾選就返回 false。
+
+                2. 場景: 已經使用 value 的狀況下，value 的初始值，是會影響 v-model 收集回來的數據
+                    (1). 如果錯誤的寫成 hobby: '' ，則收集的還是 true、false，即使已經配置 value 也不奏效。
+                    (2). 所以必須有 value 之外，還要將 hobby 聲明為數組  ->  hobby: []
+            -->
+            学习 <input v-model="userInfo.hobby" type="checkbox" value="study" />
+            打游戏 <input v-model="userInfo.hobby" type="checkbox" value="game" />
+            吃饭 <input v-model="userInfo.hobby" type="checkbox" value="eat" />
+            <br /><hr>
+
+
+            所属校区
+            <select v-model="userInfo.city">
+                <option value="">请选择校区</option>
+                <option value="Beijing">北京</option>
+                <option value="Shanghai">上海</option>
+                <option value="Shenzhen">深圳</option>
+                <option value="Wuhan">武汉</option>
+            </select>
+            <br /><hr>
+
+
+            <!-- lazy 修飾符: 等失去焦點的時候再收集數據。 -->
+            其他信息<textarea v-model.lazy="userInfo.other"></textarea>
+            <br /><hr>
+
+
+            <!-- 
+            此時我們需要的就是是否勾選，所以我們就不需要聲明 value，
+            同時也不需要將 ifAgree 定義為數組，直接聲明為  ifAgree: '' 
+            -->
+            <input type="checkbox" v-model="userInfo.ifAgree" />阅读并接受<a href="https://www.google.com.tw">《用户协议》</a>
+
+
+            <button>提交数据</button>
+        </form>
+    </div>
+    <script type="text/javascript">
+        Vue.config.productionTip = false;
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                userInfo: {
+                    account: '',
+                    password: '',
+                    sex: 'male', // 想提供默認值就直接在這裡聲明就可以了。
+                    age: '',
+                    hobby: [],
+                    city: '', // 提供默認值的寫法: city: 'Beijing'
+                    other: '',
+                    ifAgree: ''
+                }
+            },
+            methods: {
+                demo() {
+                    // json 转换为 string
+                    console.log(JSON.stringify(this.userInfo));
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
