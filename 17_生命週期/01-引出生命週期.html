@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01-引出生命週期.html</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <!--
+            生命周期：
+                1.又名：生命周期回调函数、生命周期函数、生命周期钩子。
+
+                2.是什么：Vue 在关键时刻帮我们调用的一些特殊名称的函数。
+
+                3.生命周期函数的名字不可更改，但函数的具体内容是程序员根据需求编写的。
+
+                4.生命周期函数中的this指向是vm 或 组件实例对象。
+        -->
+
+
+        <h1 v-if="a">你好啊</h1>
+
+
+        {{ change() }}
+
+
+        <!-- v-bind 绑定-->
+        <!-- 
+            {opacity: opacity} -> 第一個是 css 屬性名、第二個是屬性值
+            又因為表達式是對象形式，所以我們可以寫成對象的簡寫形式。 
+        -->
+        <h1 :style="{opacity}">欢迎学习vue</h1>
+    </div>
+
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false;
+
+        const vm = new Vue({
+            el: "#root",
+            data: {
+                opacity: 1,
+                a: true
+            },
+            methods: {
+                // 千萬不要這樣寫，因為當我們修改 opacity 的值時，
+                // 會重新渲染頁面，最後會造成死循環，不信就自己打開註解。
+                change() {
+                    // console.log('開啟了一個定時器')
+                    // setInterval(() => {
+                    //     this.opacity -= 0.01;
+                    //     if (vm.opacity <= 0) vm.opacity = 1;
+                    // }, 16)
+                }
+            },
+
+
+            // mounted (安裝、掛載)
+            // vue 完成模版的解析并把初始的真实的 dom 元素挂载完毕就调用 mounted 函数
+            // 只调用一次 !!!
+            mounted() {
+                //关键性时刻调用对应的函数 生命周期
+                console.log('mounted');
+
+                const timer = setInterval(() => {
+                    // (1). Vue 在幫你調用 montede() 這個函數時，已經幫你維護好 this 了
+                    // (2). 箭頭函数没有 this 会从外部作用域寻找，而 mounted 是由 vue 管理的函数
+                    // ，所以该函数中的 this 是 vm ( vue实例对象 )。
+                    this.opacity -= 0.01;
+                    if (this.opacity <= 0) this.opacity = 1;
+                }, 16);
+            }
+        });
+
+
+        // 通过外部的定时器实现，不推荐
+        // setInterval(() => {
+        //     vm.opacity -= 0.01;
+        //     if( vm.opacity <= 0) vm.opacity = 1;
+        // }, 16);
+    </script>
+</body>
+
+</html>

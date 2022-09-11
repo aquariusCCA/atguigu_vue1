@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02-分析生命週期.html</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <!-- 
+        id 是 root 的裡面的東西都算是模板，包含 id 是 root 的 div。
+        如果 div 不是模板中的一部分，那他正常來說是不可以獲取到 n 的值。
+    -->
+    <div id="root" :x="n">
+        <h1>当前的n值是{{ n }}</h1>
+
+        <h1 v-text="n"></h1><br>
+
+        <button @click="add">点我+1</button><br>
+
+        <button @click="bye">点我销毁vm</button><br>
+    </div>
+
+
+    <script type="text/javascript">
+
+        Vue.config.productionTip = false;
+
+
+        new Vue({
+            el: "#root",
+            // template 模版字符串只能有一个根结点，也就是說我們不可以將 <template></template> 標籤聲明為父元素。
+            // 注意template是不能作为根标签来使用的，不能去骗vue，可以用fragment(vue3新加，模仿react)
+            // 如下是正確寫法
+            // template: `
+            //     <div>
+            //         <template> 
+            //             <h1>当前的n值是{{ n }}</h1>
+            //             <h1>当前的n值是{{ n }}</h1>
+            //         </template>
+            //         <button @click="add">点我+1</button>
+            //     </div>
+            //     `,
+            data: {
+                n: 1
+            },
+            methods: {
+                add() {
+                    //
+                    console.log('add')
+
+                    this.n++;
+                },
+                bye() {
+                    // 实例销毁后调用。该钩子被调用后，对应 Vue 实例的所有指令都被解绑，
+                    // 所有的(自定义)事件监听器被移除，所有的子实例也都被销毁。
+                    console.log('bye');
+
+                    this.$destroy();
+                }
+            },
+            watch: {
+                n() {
+                    console.log('n变了');
+                }
+            },
+            beforeCreate() {
+                // 此時無法透過 vm 訪問到 data 中的數據、methods 中的方法。
+                console.log('beforeCreate');
+
+                // this 就是 vm 實例對象
+                // console.log(this);
+
+                // debugger: 顧名思義就是用來 Debug 的，可以讓程式執行到有 debugger 的地方。
+                // debugger;
+
+            },
+            created() {
+                // 此時可以通過 vm 訪問到 data 中的數據、methods 中配置的方法。
+                console.log('created');
+
+                // this 就是 vm 實例對象
+                // console.log(this);
+
+                // debugger: 顧名思義就是用來 Debug 的，可以讓程式執行到有 debugger 的地方。
+                // debugger;
+            },
+            beforeMount() {
+                // 此時
+                // 1. 頁面呈現的是未經 Vue 編譯的 DOM 結構
+                // 2. 所有對 DOM 的操作，最終都是不奏效的。
+                console.log('beforeMount');
+
+                // this 就是 vm 實例對象
+                // console.log(this);
+
+                // debugger: 顧名思義就是用來 Debug 的，可以讓程式執行到有 debugger 的地方。
+                // debugger;
+            },
+            mounted() {
+                // 此時:
+                //     1. 頁面中呈現的是經過 Vue 編譯的 DOM。
+                //     2. 對 DOM 的操作均有效 (盡可能避免，因為用了 Vue 之後，就盡量不要自己去操作 DOM)。
+                // 
+                // 至此初始化過程結束，一般在此進行: 開啟定時器、發送網路請求、訂閱消息
+                // 、綁定自定義事件、等等初始化操作。
+                console.log('mounted');
+
+                // this 就是 vm 實例對象
+                // console.log(this);
+
+                // debugger: 顧名思義就是用來 Debug 的，可以讓程式執行到有 debugger 的地方。
+                // debugger;
+            },
+            beforeUpdate() {  // 當 data 發生改變的時候，才會觸發。
+                // 此時數據是新的，但是頁面是舊的
+                // 即: 頁面尚未和數據保持同步。
+                console.log('beforeUpdate');
+
+
+                // 此时数据是新的，页面还是旧的，vue还没根据新的数据去生成新的虚拟dom，去比较旧的虚拟dom
+                console.log(this.n);
+
+                // debugger: 顧名思義就是用來 Debug 的，可以讓程式執行到有 debugger 的地方。
+                // debugger;
+            },
+            // 根據新數據，生成虛擬 DOM，隨後與舊的虛擬 DOM 進行以較，
+            // 最終完成頁面更新。即: 完成了 Model -> View 的更新。
+            updated() {  // 當 data 發生改變的時候，才會觸發。
+                // 此時數據是最新的，頁面也是新的，
+                // 即: 頁面的和數據保持同步
+                console.log('updated');
+
+
+                // 此时数据是新的，页面也是新的，同步
+                console.log(this.n);
+
+
+                // debugger: 顧名思義就是用來 Debug 的，可以讓程式執行到有 debugger 的地方。
+                // debugger;
+            },
+            beforeDestroy() {
+                // 此時 vm 中所有的 data、methods、指令等等，
+                // 都處於可用狀態，馬上要執行銷毀過程，一般在此階段: 關閉定時器。取消訂閱消息
+                // 、解綁自定義事件等收尾動作。
+
+                // 仍然可以使用 data, methods，关闭定时器，取消订阅消息，解绑自定义事件等收尾工作，移除 watchers
+                console.log('beforeDestroy');
+
+                console.log(this.n);
+
+                // 记住一旦到了 beforeDestroy 或者 destroyed 钩子，
+                // 即使你拿到数据想要更新它也不会走更新的路了 ( beforeUpdate, updated )
+                this.add();
+
+
+                debugger;
+            },
+            destroyed() { // destroyed 钩子几乎不用
+                console.log('destroyed');
+
+                // 记住一旦到了 beforeDestroy 或者 destroyed 钩子，
+                // 即使你拿到数据想要更新它也不会走更新的路了 ( beforeUpdate, updated )
+                this.add();
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>
