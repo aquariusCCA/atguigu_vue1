@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03-組件的嵌套.html</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root" :x="x">
+    
+        <!--组件的嵌套-->
+
+        <!-- 
+            <app></app>
+            我們可以不需要再容器裡面使用 app 組件，
+            直接在 vm 中使用 app 組件就可以了。 
+        -->
+    </div>
+
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false;
+
+
+        // 創建 student 組件
+        const student = Vue.extend({
+            template: `
+               <div>
+                  <h2>学生姓名:{{ name }}</h2>
+                  <h2>学生年龄:{{ age }}</h2>
+               </div>
+            `,
+            data() {
+                return {
+                    name: 'JONE',
+                    age: 13
+                }
+            },
+        });
+
+
+        // 創建 school 組件
+        const school = Vue.extend({
+            template: `
+              <div>
+                 <h1>学校名称:{{ name }}</h1>
+                 <h1>学校地址:{{ address }}</h1>
+                 <!--子组件注册给哪个父组件，就嵌套在哪个副组件里面--->
+                 <student></student>
+              </div>
+            `,
+            data() {
+                return {
+                    name: '武汉科技大学',
+                    address: '武汉'
+                }
+            },
+
+            //组件嵌套
+            //这里也是局部注册组件
+            components: {
+                // 要先創建好 student 組件，才能註冊組件
+                // 不要先註冊，後創建。
+                student
+            }
+        });
+
+
+
+        // 創建 hello 組件
+        const hello = Vue.extend({
+            template: `<h1>{{ msg }}</h1>`,
+            data() {
+                return {
+                    msg: 'hello, my vue world',
+                }
+            },
+        });
+
+
+        // 創建 app 組件
+        // 開發中會創建一個 app 組件，用於管理所有組件。
+        const app = Vue.extend({
+            template: `
+                <div>
+                    <school></school> <hr>
+                    <hello></hello> <hr>
+                </div>
+            `,
+            components: {
+                school,
+                hello
+            }
+        });
+
+
+
+        // 創建 Vue 實例
+        new Vue({
+            template: `<app></app>`,
+            el: "#root",
+            //注册组件(局部)
+            components: {
+                // schoo 组件与 hello 组件平级
+                // school,
+                // hello,
+
+
+                // 開發中會創建一個 app 組件，用於管理所有組件。
+                app,
+            },
+            data: {
+                x: 1,
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>
