@@ -44,4 +44,7 @@
 //
 //  因為之前是需要學習的比較清楚才會加上 Vue.extend({...})
 // ，其實 Vue.extend() 是可以省略的，我們只需要傳入配置對象即可。
+
+    // google 關鍵字: ES6 模塊化
+    // 原文網址: https://blog.csdn.net/thewar196/article/details/122611955
 </script>
